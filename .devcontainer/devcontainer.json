@@ -1,0 +1,21 @@
+//devcointainer reference guide: https://code.visualstudio.com/docs/remote/devcontainerjson-reference
+//terminal reference guide: https://code.visualstudio.com/docs/editor/integrated-terminal
+{
+	"name": "aws-iam-roles-anywhere-demo",
+	"dockerFile": "Dockerfile",
+	"settings": {
+		"terminal.integrated.defaultProfile.linux": "bash",
+		"terminal.integrated.profiles.linux": {
+			"bash": {
+				"path": "bash",
+				"icon": "star"
+			}
+		},
+		"editor.formatOnSave": true
+	},
+	"remoteUser": "vscode",
+	"runArgs": [
+		"--privileged"
+	],
+	"extensions": []
+}
