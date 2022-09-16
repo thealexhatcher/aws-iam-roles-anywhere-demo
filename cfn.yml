@@ -1,0 +1,51 @@
+
+Parameters:
+  x509CertificateData:
+    type: string
+
+Resources:
+  ProfileRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - rolesanywhere.amazonaws.com
+            Action:
+              - sts:AssumeRole
+              - sts:TagSession
+              - sts:SetSourceIdentity
+            #Condition: 
+            #  StringEquals:
+            #    aws:PrincipalTag/x509Subject/CN": "EXAMPLE_CN"
+            #    aws:PrincipalTag/x509Subject/OU": "EXAMPLE_OU"
+      Path: /
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: '*'
+                Resource: '*'
+                
+  TrustAnchor:
+    Type: AWS::RolesAnywhere::TrustAnchor
+    Properties: 
+      Name: !Sub "${AWS::STACKNAME}-trust-anchor"
+      Source: 
+        SourceData:
+          x509CertificateData: 
+        SourceType: CERTIFICATE_BUNDLE
+
+  Profile:
+    Type: AWS::RolesAnywhere::Profile
+    Properties: 
+      Name: !Sub "${AWS::STACKNAME}-profile"
+      #RequireInstanceProperties: Boolean
+      RoleArns: 
+      - !GetAtt ProfileRole.arn
+      #SessionPolicy: String
